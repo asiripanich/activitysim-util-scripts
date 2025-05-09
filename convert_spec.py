@@ -49,6 +49,9 @@ def _(Counter, re):
 
             s = s_original
 
+            # 0. % to 'pct' to avoid confusion
+            s = s.replace("%", "pct_")
+
             # 1. Replace common separators (space, hyphen, colon) with underscore
             s = s.replace(" ", "_").replace("-", "_").replace(":", "_")
 
