@@ -181,12 +181,24 @@ def _(spec_file):
 
 
 @app.cell
+def _():
+    ## Your input spec
+    return
+
+
+@app.cell
 def _(pl, spec_file):
     input_spec = pl.read_csv(
         spec_file.value[0].contents
-    ).with_row_index()
+    )
     input_spec
     return (input_spec,)
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""Added the 'Label' column by converting the 'Description' column to underscore case and ensured there were no duplicate names.""")
+    return
 
 
 @app.cell
@@ -198,7 +210,7 @@ def _(
 ):
     label = convert_to_underscore_case(input_spec["Description"].to_list())
     label = uniquify_string_list_with_numbering(label)
-    spec = input_spec.with_columns(Label=pl.concat_str(pl.lit("util_"), pl.Series(label)))
+    spec = input_spec.with_row_index().with_columns(Label=pl.concat_str(pl.lit("util_"), pl.Series(label)))
     spec
     return (spec,)
 
@@ -223,8 +235,6 @@ def _(pl, spec):
             .otherwise(pl.lit("F")),
         )
     )
-
-    coefficients
     return choice_cols, coefficients
 
 
@@ -248,14 +258,15 @@ def _(choice_cols, coefficients, pl, spec):
     return
 
 
-app._unparsable_cell(
-    r"""
-    ## Here's your new coefficient file
-
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ## Here's your new specification file
     All coefficients with value equal to -999 or 0 will have 'T' as their constrain.
-    """,
-    name="_"
-)
+    """
+    )
+    return
 
 
 @app.cell
