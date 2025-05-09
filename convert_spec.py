@@ -121,7 +121,7 @@ def _(Counter, re):
 
 @app.cell
 def _(mo):
-    spec_file = mo.ui.file(kind="button")
+    spec_file = mo.ui.file(kind="area", filetypes=['.csv'])
     return (spec_file,)
 
 
